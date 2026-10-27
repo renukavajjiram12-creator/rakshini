@@ -1,0 +1,1068 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Attendify | Student Attendance Tracker</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="background-shape shape-one"></div>
+    <div class="background-shape shape-two"></div>
+
+    <header class="navbar">
+        <div class="logo">
+            <span>◉</span> Attendify
+        </div>
+
+        <div class="nav-text">
+            Student Attendance Tracker
+        </div>
+    </header>
+
+    <main class="dashboard">
+
+        <section class="welcome">
+            <div>
+                <p class="small-title">WELCOME BACK 👋</p>
+                <h1>Attendance Dashboard</h1>
+                <p class="subtitle">
+                    Track student attendance quickly and easily.
+                </p>
+            </div>
+
+            <div class="date-box">
+                <span id="currentDate"></span>
+            </div>
+        </section>
+
+
+        <!-- STAT CARDS -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <div class="icon purple">👨‍🎓</div>
+                <div>
+                    <p>Total Students</p>
+                    <h2 id="totalStudents">0</h2>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon green">✓</div>
+                <div>
+                    <p>Present Today</p>
+                    <h2 id="totalPresent">0</h2>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon red">×</div>
+                <div>
+                    <p>Absent Today</p>
+                    <h2 id="totalAbsent">0</h2>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon orange">%</div>
+                <div>
+                    <p>Class Attendance</p>
+                    <h2 id="classPercentage">0%</h2>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ADD STUDENT -->
+
+        <section class="glass-card add-section">
+
+            <div class="section-heading">
+                <div>
+                    <span class="tag">NEW STUDENT</span>
+                    <h2>Add Student</h2>
+                </div>
+            </div>
+
+            <div class="input-area">
+
+                <div class="input-box">
+                    <label>Student Name</label>
+                    <input
+                        type="text"
+                        id="studentName"
+                        placeholder="Enter student name">
+                </div>
+
+                <div class="input-box">
+                    <label>Register Number</label>
+                    <input
+                        type="text"
+                        id="registerNo"
+                        placeholder="Enter register number">
+                </div>
+
+                <button class="add-btn" onclick="addStudent()">
+                    + Add Student
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STUDENT LIST -->
+
+        <section class="glass-card">
+
+            <div class="section-heading">
+                <div>
+                    <span class="tag">LIVE RECORD</span>
+                    <h2>Student Attendance</h2>
+                </div>
+
+                <input
+                    class="search"
+                    type="text"
+                    id="search"
+                    placeholder="🔍 Search student..."
+                    onkeyup="searchStudent()">
+            </div>
+
+
+            <div class="student-grid" id="studentList">
+
+                <div class="empty">
+                    <div class="empty-icon">📋</div>
+                    <h3>No students added</h3>
+                    <p>Add your first student to start tracking attendance.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>Attendify © 2026 | Student Attendance Management System</p>
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    color: #20213a;
+
+    background:
+        radial-gradient(circle at 10% 20%, #ddd6fe 0%, transparent 30%),
+        radial-gradient(circle at 90% 80%, #bfdbfe 0%, transparent 30%),
+        #f7f8ff;
+
+    overflow-x: hidden;
+}
+
+
+/* BACKGROUND */
+
+.background-shape {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.45;
+    z-index: -1;
+}
+
+.shape-one {
+    width: 300px;
+    height: 300px;
+    background: #8b5cf6;
+    top: -100px;
+    left: -100px;
+}
+
+.shape-two {
+    width: 350px;
+    height: 350px;
+    background: #38bdf8;
+    bottom: -150px;
+    right: -100px;
+}
+
+
+/* NAVBAR */
+
+.navbar {
+    height: 75px;
+    padding: 0 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(20px);
+
+    border-bottom: 1px solid rgba(255,255,255,0.8);
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    color: #5b21b6;
+}
+
+.logo span {
+    display: inline-flex;
+    width: 35px;
+    height: 35px;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 12px;
+    color: white;
+
+    background: linear-gradient(135deg,#7c3aed,#4f46e5);
+}
+
+.nav-text {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+
+/* DASHBOARD */
+
+.dashboard {
+    width: 86%;
+    max-width: 1250px;
+    margin: 45px auto;
+}
+
+
+/* WELCOME */
+
+.welcome {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.small-title {
+    color: #7c3aed;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.welcome h1 {
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #6b7280;
+}
+
+.date-box {
+    padding: 14px 20px;
+    border-radius: 15px;
+
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 10px 30px rgba(80,70,150,0.08);
+
+    font-weight: 600;
+}
+
+
+/* STAT CARDS */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    padding: 22px;
+
+    display: flex;
+    align-items: center;
+    gap: 17px;
+
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255,255,255,0.8);
+
+    box-shadow: 0 15px 40px rgba(50,40,100,0.07);
+
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card p {
+    color: #7b7e8c;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.stat-card h2 {
+    font-size: 26px;
+}
+
+.icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 16px;
+    font-size: 22px;
+}
+
+.purple {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.green {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.red {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.orange {
+    background: #ffedd5;
+    color: #ea580c;
+}
+
+
+/* GLASS CARD */
+
+.glass-card {
+    padding: 28px;
+    margin-bottom: 25px;
+
+    border-radius: 25px;
+
+    background: rgba(255,255,255,0.70);
+    backdrop-filter: blur(25px);
+
+    border: 1px solid rgba(255,255,255,0.8);
+
+    box-shadow: 0 20px 50px rgba(50,40,100,0.07);
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.section-heading h2 {
+    margin-top: 6px;
+}
+
+.tag {
+    font-size: 10px;
+    font-weight: 800;
+    color: #7c3aed;
+    letter-spacing: 1.5px;
+}
+
+
+/* INPUT */
+
+.input-area {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 15px;
+    align-items: end;
+}
+
+.input-box label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #5f6272;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 14px 16px;
+
+    border: 1px solid #e4e4ed;
+    border-radius: 13px;
+
+    outline: none;
+    background: rgba(255,255,255,0.8);
+
+    transition: 0.3s;
+}
+
+.input-box input:focus {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 4px #ede9fe;
+}
+
+
+/* BUTTON */
+
+.add-btn {
+    padding: 14px 23px;
+
+    border: none;
+    border-radius: 13px;
+
+    color: white;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    background: linear-gradient(135deg,#7c3aed,#4f46e5);
+
+    box-shadow: 0 10px 20px rgba(99,70,200,0.25);
+
+    transition: 0.3s;
+}
+
+.add-btn:hover {
+    transform: translateY(-3px);
+}
+
+
+/* SEARCH */
+
+.search {
+    width: 230px;
+    padding: 12px 15px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    outline: none;
+}
+
+
+/* STUDENT GRID */
+
+.student-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 18px;
+}
+
+
+/* STUDENT CARD */
+
+.student-card {
+    padding: 22px;
+
+    border: 1px solid #eeeef5;
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.75);
+
+    animation: appear 0.4s ease;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.student-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.student-info {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    color: white;
+    font-weight: 800;
+
+    background: linear-gradient(135deg,#8b5cf6,#4f46e5);
+}
+
+.student-info h3 {
+    font-size: 16px;
+}
+
+.student-info p {
+    font-size: 11px;
+    color: #888b98;
+    margin-top: 3px;
+}
+
+
+/* ATTENDANCE CIRCLE */
+
+.attendance-circle {
+    width: 60px;
+    height: 60px;
+
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    background:
+        radial-gradient(closest-side, white 78%, transparent 79%),
+        conic-gradient(#7c3aed var(--percentage), #ede9fe 0);
+}
+
+
+/* RECORD */
+
+.record {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.record div {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.present {
+    background: #ecfdf5;
+    color: #15803d;
+}
+
+.absent {
+    background: #fff1f2;
+    color: #dc2626;
+}
+
+.record strong {
+    display: block;
+    font-size: 17px;
+}
+
+.record span {
+    font-size: 10px;
+}
+
+
+/* ACTIONS */
+
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.actions button {
+    flex: 1;
+    padding: 10px;
+
+    border: none;
+    border-radius: 10px;
+
+    cursor: pointer;
+    font-weight: 700;
+
+    transition: 0.2s;
+}
+
+.present-btn {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.absent-btn {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.delete-btn {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.actions button:hover {
+    transform: scale(1.03);
+}
+
+
+/* EMPTY */
+
+.empty {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 50px;
+    color: #8b8d99;
+}
+
+.empty-icon {
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+.empty h3 {
+    color: #454755;
+    margin-bottom: 5px;
+}
+
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #858797;
+    font-size: 12px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:900px) {
+
+    .stats {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .input-area {
+        grid-template-columns: 1fr;
+    }
+
+    .student-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media(max-width:600px) {
+
+    .navbar {
+        padding: 0 5%;
+    }
+
+    .nav-text {
+        display: none;
+    }
+
+    .dashboard {
+        width: 92%;
+        margin-top: 30px;
+    }
+
+    .welcome {
+        display: block;
+    }
+
+    .welcome h1 {
+        font-size: 28px;
+    }
+
+    .date-box {
+        display: inline-block;
+        margin-top: 15px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .section-heading {
+        display: block;
+    }
+
+    .search {
+        width: 100%;
+        margin-top: 15px;
+    }
+}</style><script>let students = [];
+
+
+// DATE
+
+document.getElementById("currentDate").innerText =
+    new Date().toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
+
+
+// ADD STUDENT
+
+function addStudent() {
+
+    const name = document.getElementById("studentName").value.trim();
+    const registerNo = document.getElementById("registerNo").value.trim();
+
+    if (name === "" || registerNo === "") {
+
+        alert("Please enter student name and register number!");
+
+        return;
+    }
+
+
+    const student = {
+
+        name: name,
+        registerNo: registerNo,
+
+        present: 0,
+        absent: 0
+
+    };
+
+
+    students.push(student);
+
+
+    document.getElementById("studentName").value = "";
+    document.getElementById("registerNo").value = "";
+
+
+    displayStudents();
+
+    updateDashboard();
+}
+
+
+
+// PRESENT
+
+function markPresent(index) {
+
+    students[index].present++;
+
+    displayStudents();
+
+    updateDashboard();
+}
+
+
+
+// ABSENT
+
+function markAbsent(index) {
+
+    students[index].absent++;
+
+    displayStudents();
+
+    updateDashboard();
+}
+
+
+
+// DELETE
+
+function deleteStudent(index) {
+
+    if (confirm("Delete this student?")) {
+
+        students.splice(index, 1);
+
+        displayStudents();
+
+        updateDashboard();
+    }
+}
+
+
+
+// DISPLAY STUDENTS
+
+function displayStudents(list = students) {
+
+    const container = document.getElementById("studentList");
+
+    container.innerHTML = "";
+
+
+    if (list.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty">
+
+                <div class="empty-icon">📋</div>
+
+                <h3>No students found</h3>
+
+                <p>Add a student to start tracking attendance.</p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.forEach((student) => {
+
+        const originalIndex = students.indexOf(student);
+
+        const total =
+            student.present + student.absent;
+
+
+        let percentage = 0;
+
+
+        if (total > 0) {
+
+            percentage =
+                Math.round(
+                    (student.present / total) * 100
+                );
+
+        }
+
+
+        const firstLetter =
+            student.name.charAt(0).toUpperCase();
+
+
+        container.innerHTML += `
+
+            <div class="student-card">
+
+                <div class="student-top">
+
+                    <div class="student-info">
+
+                        <div class="avatar">
+                            ${firstLetter}
+                        </div>
+
+                        <div>
+
+                            <h3>${student.name}</h3>
+
+                            <p>Reg No: ${student.registerNo}</p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="attendance-circle"
+                        style="--percentage:${percentage}%">
+
+                        ${percentage}%
+
+                    </div>
+
+                </div>
+
+
+                <div class="record">
+
+                    <div class="present">
+
+                        <strong>
+                            ${student.present}
+                        </strong>
+
+                        <span>Present</span>
+
+                    </div>
+
+
+                    <div class="absent">
+
+                        <strong>
+                            ${student.absent}
+                        </strong>
+
+                        <span>Absent</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="actions">
+
+                    <button
+                        class="present-btn"
+                        onclick="markPresent(${originalIndex})">
+
+                        ✓ Present
+
+                    </button>
+
+
+                    <button
+                        class="absent-btn"
+                        onclick="markAbsent(${originalIndex})">
+
+                        × Absent
+
+                    </button>
+
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteStudent(${originalIndex})">
+
+                        🗑
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+
+// DASHBOARD UPDATE
+
+function updateDashboard() {
+
+    let totalPresent = 0;
+    let totalAbsent = 0;
+
+
+    students.forEach(student => {
+
+        totalPresent += student.present;
+
+        totalAbsent += student.absent;
+
+    });
+
+
+    const totalClasses =
+        totalPresent + totalAbsent;
+
+
+    let percentage = 0;
+
+
+    if (totalClasses > 0) {
+
+        percentage =
+            Math.round(
+                (totalPresent / totalClasses) * 100
+            );
+
+    }
+
+
+    document.getElementById("totalStudents")
+        .innerText = students.length;
+
+
+    document.getElementById("totalPresent")
+        .innerText = totalPresent;
+
+
+    document.getElementById("totalAbsent")
+        .innerText = totalAbsent;
+
+
+    document.getElementById("classPercentage")
+        .innerText = percentage + "%";
+}
+
+
+
+// SEARCH
+
+function searchStudent() {
+
+    const searchValue =
+        document
+        .getElementById("search")
+        .value
+        .toLowerCase();
+
+
+    const filtered =
+        students.filter(student =>
+
+            student.name
+            .toLowerCase()
+            .includes(searchValue)
+
+            ||
+
+            student.registerNo
+            .toLowerCase()
+            .includes(searchValue)
+
+        );
+
+
+    displayStudents(filtered);
+}</script>
